@@ -13,5 +13,5 @@ data class GithubRepo (
         val url: String,
         val stargazers_count: Int,
         val watchers_count: Int,
-        val language: String,
+        val language: String?,
 ) : Parcelable

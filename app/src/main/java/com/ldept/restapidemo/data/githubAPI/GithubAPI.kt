@@ -9,7 +9,7 @@ interface GithubAPI {
     companion object {
         const val BASE_URL =  "https://api.github.com/"
     }
-    @GET("repos/allegro")
+    @GET("users/allegro/repos")
     suspend fun getAllegroRepos(
         @Query("page") page: Int,
         @Query("per_page") perPage: Int,
