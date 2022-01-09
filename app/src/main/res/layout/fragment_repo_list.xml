@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     tools:context=".ui.repoListFragment.RepoListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -12,5 +13,11 @@
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/repo_item" />
+
+    <include layout="@layout/repo_load_state_footer"
+        android:id="@+id/load_state_layout"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"/>
 
 </FrameLayout>

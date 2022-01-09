@@ -5,9 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.paging.LoadState
 import com.ldept.restapidemo.R
 import com.ldept.restapidemo.databinding.FragmentRepoListBinding
+import com.ldept.restapidemo.databinding.RepoLoadStateFooterBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,7 +33,26 @@ class RepoListFragment : Fragment() {
         val adapter = RepoAdapter()
         binding.apply {
             repoRecyclerview.setHasFixedSize(true)
-            repoRecyclerview.adapter = adapter
+            repoRecyclerview.adapter = adapter.withLoadStateHeaderAndFooter(
+                header = RepoLoadStateAdapter { adapter.retry() },
+                footer = RepoLoadStateAdapter { adapter.retry() }
+            )
+
+            loadStateLayout.buttonRetry.setOnClickListener {
+                adapter.retry()
+            }
+        }
+
+        adapter.addLoadStateListener { loadState ->
+            binding.apply {
+                loadStateLayout.apply {
+                    progressbar.isVisible = loadState.source.refresh is LoadState.Loading
+                    textviewError.isVisible = loadState.source.refresh is LoadState.Error
+                    buttonRetry.isVisible = loadState.source.refresh is LoadState.Error
+                }
+
+                repoRecyclerview.isVisible = loadState.source.refresh is LoadState.NotLoading
+            }
         }
 
         viewModel.githubRepos.observe(viewLifecycleOwner) { pagingData ->
