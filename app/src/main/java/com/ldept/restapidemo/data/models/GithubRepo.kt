@@ -14,4 +14,10 @@ data class GithubRepo (
         val stargazers_count: Int,
         val watchers_count: Int,
         val language: String?,
-) : Parcelable
+        val license: GithubLicense?
+) : Parcelable {
+        @Parcelize
+        data class GithubLicense(
+                val name: String,
+        ) : Parcelable
+}
