@@ -4,4 +4,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="error_while_loading_results">Error while loading results. Check the internet connection.</string>
     <string name="retry">Retry</string>
+    <string name="files">Files</string>
+    <string name="file_type">File type</string>
+    <string name="license">License</string>
+    <string name="allegro_repository_list">Allegro repository list</string>
+    <string name="repository_details">Repository Details</string>
 </resources>

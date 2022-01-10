@@ -8,6 +8,23 @@
     <fragment
         android:id="@+id/repoListFragment"
         android:name="com.ldept.restapidemo.ui.repoListFragment.RepoListFragment"
-        android:label="fragment_repo_list"
-        tools:layout="@layout/fragment_repo_list" />
+        android:label="@string/allegro_repository_list"
+        tools:layout="@layout/fragment_repo_list">
+        <action
+            android:id="@+id/action_repoListFragment_to_repoDetailsFragment"
+            app:destination="@id/repoDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/repoDetailsFragment"
+        android:name="com.ldept.restapidemo.ui.repoDetailsFragment.RepoDetailsFragment"
+        android:label="@string/repository_details"
+        tools:layout="@layout/fragment_repo_details">
+        <argument
+            android:name="repo"
+            app:argType="com.ldept.restapidemo.data.models.GithubRepo" />
+    </fragment>
 </navigation>

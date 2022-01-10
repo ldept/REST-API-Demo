@@ -7,14 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.ldept.restapidemo.R
+import com.ldept.restapidemo.data.models.GithubRepo
 import com.ldept.restapidemo.databinding.FragmentRepoListBinding
 import com.ldept.restapidemo.databinding.RepoLoadStateFooterBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RepoListFragment : Fragment() {
+class RepoListFragment : Fragment(), RepoAdapter.OnItemClickListener {
 
     private val viewModel by viewModels<RepoListViewModel>()
 
@@ -30,7 +32,7 @@ class RepoListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentRepoListBinding.bind(view)
-        val adapter = RepoAdapter()
+        val adapter = RepoAdapter(listener = this)
         binding.apply {
             repoRecyclerview.setHasFixedSize(true)
             repoRecyclerview.adapter = adapter.withLoadStateHeaderAndFooter(
@@ -58,6 +60,13 @@ class RepoListFragment : Fragment() {
         viewModel.githubRepos.observe(viewLifecycleOwner) { pagingData ->
             adapter.submitData(viewLifecycleOwner.lifecycle, pagingData)
         }
+    }
+
+    override fun onItemClick(githubRepo: GithubRepo) {
+        val action = RepoListFragmentDirections.actionRepoListFragmentToRepoDetailsFragment(
+            githubRepo
+        )
+        findNavController().navigate(action)
     }
 
 }
