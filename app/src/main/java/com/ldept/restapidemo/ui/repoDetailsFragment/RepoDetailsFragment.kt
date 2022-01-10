@@ -43,7 +43,14 @@ class RepoDetailsFragment : Fragment() {
             val repo: GithubRepo = args.repo
 
             textviewName.text = repo.name
-            textviewLicenseName.text = repo.license?.name ?: ""
+            textviewLicenseName.text = repo.license?.name ?: getString(R.string.no_license_info)
+
+            val starsText = textviewStargazers.text.toString() + ": " + repo.stargazers_count
+            textviewStargazers.text = starsText
+            val watchersText = textviewWatchers.text.toString() + ": " + repo.watchers_count
+            textviewWatchers.text = watchersText
+            textviewVisibility.text = repo.visibility
+
 
             filesRecyclerview.apply {
                 adapter = filesAdapter
