@@ -79,10 +79,7 @@ class RepoDetailsFragment : Fragment() {
 
         viewModel.fileListResponse.observe(viewLifecycleOwner) { apiResponse ->
             if (apiResponse.isSuccessful) {
-                binding.apply {
-                    contentLayout.isVisible = true
-                    loadStateLayout.progressbar.isVisible = false
-                }
+                showContent(binding)
                 val list = apiResponse.body()
                 if (list != null) {
                     filesAdapter.submitList(list.sortedWith(compareBy({ it.type }, { it.name })))
@@ -93,6 +90,15 @@ class RepoDetailsFragment : Fragment() {
         }
 
 
+    }
+
+    private fun showContent(binding: FragmentRepoDetailsBinding) {
+        binding.apply {
+            contentLayout.isVisible = true
+            loadStateLayout.progressbar.isVisible = false
+            loadStateLayout.textviewError.isVisible = false
+            loadStateLayout.buttonRetry.isVisible = false
+        }
     }
 
     private fun showProgressBar(binding: FragmentRepoDetailsBinding) {
