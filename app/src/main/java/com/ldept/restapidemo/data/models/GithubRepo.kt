@@ -11,6 +11,8 @@ data class GithubRepo(
     val visibility: String,
     // Github Repository API url
     val url: String,
+    // "Normal" URL to github.com
+    val html_url: String,
     val stargazers_count: Int,
     val watchers_count: Int,
     val language: String?,

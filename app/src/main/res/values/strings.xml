@@ -12,4 +12,6 @@
     <string name="stargazers">Stargazers</string>
     <string name="watchers">Watchers</string>
     <string name="no_license_info">No license info</string>
+    <string name="open_repository_link">Open repository link</string>
+    <string name="no_app_found_for_link">No application found to open a web link</string>
 </resources>
