@@ -13,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.ldept.restapidemo.R
+import com.ldept.restapidemo.data.models.GithubRepo
 import com.ldept.restapidemo.databinding.FragmentRepoDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -39,7 +40,7 @@ class RepoDetailsFragment : Fragment() {
         val filesAdapter = RepoFilesAdapter()
 
         binding.apply {
-            val repo = args.repo
+            val repo: GithubRepo = args.repo
 
             textviewName.text = repo.name
             textviewLicenseName.text = repo.license?.name ?: ""

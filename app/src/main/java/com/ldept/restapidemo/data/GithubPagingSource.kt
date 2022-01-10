@@ -28,7 +28,7 @@ class GithubPagingSource(
                 nextKey = if (response.isEmpty()) null else position + 1,
             )
         } catch (exception: Exception) {
-            when(exception){
+            when (exception) {
                 // No internet connection for example
                 is IOException ->
                     LoadResult.Error(exception)

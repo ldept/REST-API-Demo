@@ -11,18 +11,19 @@ import retrofit2.http.Query
 interface GithubAPI {
 
     companion object {
-        const val BASE_URL =  "https://api.github.com/"
+        const val BASE_URL = "https://api.github.com/"
     }
+
     @Headers("Accept: application/vnd.github.v3+json")
     @GET("users/allegro/repos")
     suspend fun getAllegroRepos(
         @Query("page") page: Int,
         @Query("per_page") perPage: Int,
-    ) : List<GithubRepo>
+    ): List<GithubRepo>
 
     @Headers("Accept: application/vnd.github.v3+json")
     @GET("/repos/allegro/{name}/contents")
     suspend fun getAllegroRepoFiles(
         @Path("name") name: String
-    ) : Response<List<GithubFile>>
+    ): Response<List<GithubFile>>
 }

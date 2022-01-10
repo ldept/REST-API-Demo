@@ -2,7 +2,6 @@ package com.ldept.restapidemo.ui.repoDetailsFragment
 
 import android.util.Log
 import androidx.lifecycle.*
-import androidx.paging.PagingSource
 import com.ldept.restapidemo.data.Repository
 import com.ldept.restapidemo.data.models.GithubFile
 import com.ldept.restapidemo.data.models.GithubRepo
@@ -10,7 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import okhttp3.ResponseBody
 import retrofit2.HttpException
 import retrofit2.Response
 import java.io.IOException

@@ -8,7 +8,8 @@ import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ldept.restapidemo.databinding.RepoLoadStateFooterBinding
 
-class RepoLoadStateAdapter(private val retry: () -> Unit) : LoadStateAdapter<RepoLoadStateAdapter.RepoLoadStateViewHolder>() {
+class RepoLoadStateAdapter(private val retry: () -> Unit) :
+    LoadStateAdapter<RepoLoadStateAdapter.RepoLoadStateViewHolder>() {
 
     inner class RepoLoadStateViewHolder(private val binding: RepoLoadStateFooterBinding) :
         RecyclerView.ViewHolder(binding.root) {

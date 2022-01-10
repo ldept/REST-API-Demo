@@ -12,7 +12,6 @@ import androidx.paging.LoadState
 import com.ldept.restapidemo.R
 import com.ldept.restapidemo.data.models.GithubRepo
 import com.ldept.restapidemo.databinding.FragmentRepoListBinding
-import com.ldept.restapidemo.databinding.RepoLoadStateFooterBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
