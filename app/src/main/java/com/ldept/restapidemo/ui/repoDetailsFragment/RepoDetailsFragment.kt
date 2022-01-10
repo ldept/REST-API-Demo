@@ -5,30 +5,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.ldept.restapidemo.R
+import com.ldept.restapidemo.databinding.FragmentRepoDetailsBinding
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [RepoDetailsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class RepoDetailsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private val viewModel by viewModels<RepoDetailsViewModel>()
+    private val args by navArgs<RepoDetailsFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,23 +32,84 @@ class RepoDetailsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_repo_details, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment RepoDetailsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            RepoDetailsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentRepoDetailsBinding.bind(view)
+
+        val filesAdapter = RepoFilesAdapter()
+
+        binding.apply {
+            val repo = args.repo
+
+            textviewName.text = repo.name
+            textviewLicenseName.text = repo.license?.name ?: ""
+
+            filesRecyclerview.apply {
+                adapter = filesAdapter
+                addItemDecoration(
+                    DividerItemDecoration(
+                        filesRecyclerview.context,
+                        DividerItemDecoration.VERTICAL
+                    )
+                )
+                isNestedScrollingEnabled = false
+            }
+
+            loadStateLayout.buttonRetry.setOnClickListener {
+                viewModel.getRepoFiles()
+            }
+
+
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.eventFlow.collect { event ->
+                    when (event) {
+                        is RepoDetailsViewModel.RepoDetailsEvent.ConnectionErrorEvent -> {
+                            showConnectionError(binding)
+                        }
+                        is RepoDetailsViewModel.RepoDetailsEvent.LoadingAPIResponse -> {
+                            showProgressBar(binding)
+                        }
+                    }
                 }
             }
+        }
+
+        viewModel.fileListResponse.observe(viewLifecycleOwner) { apiResponse ->
+            if (apiResponse.isSuccessful) {
+                binding.apply {
+                    contentLayout.isVisible = true
+                    loadStateLayout.progressbar.isVisible = false
+                }
+                val list = apiResponse.body()
+                if (list != null) {
+                    filesAdapter.submitList(list.sortedWith(compareBy({ it.type }, { it.name })))
+                }
+            } else {
+                showConnectionError(binding)
+            }
+        }
+
+
+    }
+
+    private fun showProgressBar(binding: FragmentRepoDetailsBinding) {
+        binding.apply {
+            contentLayout.isVisible = false
+            loadStateLayout.progressbar.isVisible = true
+            loadStateLayout.textviewError.isVisible = false
+            loadStateLayout.buttonRetry.isVisible = false
+        }
+    }
+
+    private fun showConnectionError(binding: FragmentRepoDetailsBinding) {
+        binding.contentLayout.isVisible = false
+        binding.loadStateLayout.apply {
+            progressbar.isVisible = false
+            textviewError.isVisible = true
+            buttonRetry.isVisible = true
+        }
     }
 }
